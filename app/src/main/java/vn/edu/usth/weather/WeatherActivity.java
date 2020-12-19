@@ -1,6 +1,12 @@
 package vn.edu.usth.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,10 +17,12 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        WeatherFragment firstFragment = new WeatherFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.weather,firstFragment).commit();
-        ForecastFragment secondFragment = new ForecastFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.forecast,secondFragment).commit();
+
+        PagerAdapter adapter = new HomeFragmentPagerAdapter(getSupportFragmentManager());
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(3);
+        pager.setAdapter(adapter);
+
         Log.i("create", "onCreate: ");
     }
 
@@ -46,5 +54,38 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i("destroy", "onDestroy: ");
+    }
+
+    public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
+        private final int PAGE_COUNT = 3;
+        private String titles[] = new String[] {"Ha Noi", "Paris", "Toulouse"};
+
+        public HomeFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int page) {
+            switch (page) {
+                case 0:
+                    return new WeatherAndForecastFragment();
+                case 1:
+                    return new WeatherAndForecastFragment();
+                case 2:
+                    return new WeatherAndForecastFragment();
+                default:
+                    return new WeatherAndForecastFragment();
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int page) {
+            return titles[page];
+        }
     }
 }
