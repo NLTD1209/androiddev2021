@@ -16,5 +16,7 @@
     <string name="Saturday">Sat</string>
     <string name="Sunday">Sun</string>
     <string name="Hanoi">Hanoi</string>
+    <string name="Refresh">Refresh</string>
+    <string name="Setting">Setting</string>
 
 </resources>

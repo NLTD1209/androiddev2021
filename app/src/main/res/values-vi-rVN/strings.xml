@@ -16,4 +16,6 @@
     <string name="Sunday">Chủ Nhật</string>
     <string name="Hanoi">Hà Nội</string>
     <string name="cloudy">Có mây</string>
+    <string name="Refresh">Làm mới</string>
+    <string name="Setting">"Cài Đặt "</string>
 </resources>
