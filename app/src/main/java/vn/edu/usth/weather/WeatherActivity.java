@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -93,7 +94,7 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.refresh:
-                Refresh();
+                new Refresh().execute();
                 return true;
             case R.id.setting:
                 Log.d("setting", "onOptionsItemSelected: click");
@@ -106,6 +107,7 @@ public class WeatherActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /* lab 13
     private void Refresh(){
         final Handler handler = new Handler(Looper.getMainLooper()){
             @Override
@@ -133,6 +135,28 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
         t.start();
+    }
+*/
+
+    private class Refresh extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids){
+            try {
+                Thread.sleep(10000);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Void... voids){}
+
+        @Override
+        protected void onPostExecute(Void voids){
+            Toast.makeText(getApplicationContext(), "Refreshing Again...", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
