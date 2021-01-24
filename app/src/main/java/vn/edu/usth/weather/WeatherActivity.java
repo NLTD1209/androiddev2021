@@ -11,6 +11,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +23,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +34,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -138,23 +143,42 @@ public class WeatherActivity extends AppCompatActivity {
     }
 */
 
-    private class Refresh extends AsyncTask<Void, Void, Void> {
+    private class Refresh extends AsyncTask<Void, Integer, InputStream> {
         @Override
-        protected Void doInBackground(Void... voids){
+        protected InputStream doInBackground(Void... voids){
+            InputStream is1 = null;
             try {
-                Thread.sleep(10000);
+               // Thread.sleep(10000);
+
+                URL url = new URL("https://usth.edu.vn/uploads/logo_moi-eng.png");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.connect();
+                //response
+                int response = connection.getResponseCode();
+                Log.i("USTH blabla", "Le response is :" + response);
+                is1 = connection.getInputStream();
+                //process image
+
+                Log.i("Hello", "got logo");
+
+                connection.disconnect();
+
             }
-            catch (InterruptedException e){
+            catch (IOException e){
                 e.printStackTrace();
             }
-            return null;
+            return is1;
         }
 
         protected void onProgressUpdate(Void... voids){}
 
         @Override
-        protected void onPostExecute(Void voids){
-            Toast.makeText(getApplicationContext(), "Refreshing Again...", Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(InputStream is1){
+            Bitmap bitmap = BitmapFactory.decodeStream(is1);
+            ImageView logo = (ImageView) findViewById(R.id.logo);
+            logo.setImageBitmap(bitmap);
             return;
         }
     }
